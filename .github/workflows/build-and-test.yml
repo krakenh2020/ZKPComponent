@@ -1,0 +1,140 @@
+name: Go
+
+on:
+  push:
+    branches: [ main, mpc ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-20.04
+    services:
+      # Label used to access the service container
+      redis:
+        # Docker Hub image
+        image: redis
+        # Set health checks to wait until redis has started
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Maps port 6379 on service container to the host
+          - 6379:6379
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.17.3
+
+      - run: echo $PWD
+
+#       - name: apt update
+#        run: sudo apt update --fix-missing
+
+#      - name: apt-get upgrade
+#        run: sudo ACCEPT_EULA=Y apt-get upgrade -y
+
+      - name: apt install
+        run: sudo apt install -y git yasm python gcc g++ cmake make curl wget apt-transport-https m4 zip unzip build-essential
+
+      # Setup to use wasm tests
+      - name: Setup PATH for wasm
+        run: echo "${{env.GOROOT}}/misc/wasm" >> $GITHUB_PATH
+
+      # install MPIR
+      - name: Install MPIR
+        run: |
+          echo $PWD
+          mkdir /home/runner/work/KrakenCryptoTools/local
+          cd ../local
+          curl -O 'http://mpir.org/mpir-3.0.0.tar.bz2'
+          tar xf mpir-3.0.0.tar.bz2
+          cd mpir-3.0.0 && ./configure --enable-cxx --prefix="/home/runner/work/KrakenCryptoTools/local/mpir" && make && make check && make install
+
+      # install OpenSSL 1.1.0
+      - name: Install OpenSSL 1.1.0
+        run: |
+          cd ../local
+          curl -O https://www.openssl.org/source/old/1.1.1/openssl-1.1.1e.tar.gz
+          tar -xf openssl-1.1.1e.tar.gz
+          cd openssl-1.1.1e && ./config --prefix="/home/runner/work/KrakenCryptoTools/local/openssl"
+          make && make install
+
+      # install crypto++
+      - name: Install crypto++
+        run: |
+          cd ../local
+          curl -v --max-time 5 -O https://www.cryptopp.com/cryptopp800.zip
+          unzip cryptopp800.zip -d cryptopp800
+          cd cryptopp800 && make && make install PREFIX="/home/runner/work/KrakenCryptoTools/local/cryptopp"
+
+      # install java
+      - name: Install Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+
+
+      - name: Exports
+        run: |
+          export PATH="/home/runner/work/KrakenCryptoTools/local/openssl/bin/:${PATH}"
+          export C_INCLUDE_PATH="/home/runner/work/KrakenCryptoTools/local/openssl/include/:${C_INCLUDE_PATH}"
+          export CPLUS_INCLUDE_PATH="/home/runner/work/KrakenCryptoTools/local/openssl/include/:${CPLUS_INCLUDE_PATH}"
+          export LIBRARY_PATH="/home/runner/work/KrakenCryptoTools/local/openssl/lib/:${LIBRARY_PATH}"
+          export LD_LIBRARY_PATH="/home/runner/work/KrakenCryptoTools/local/openssl/lib/:${LD_LIBRARY_PATH}"
+          export C_INCLUDE_PATH="/home/runner/work/KrakenCryptoTools/local/mpir/include/:${C_INCLUDE_PATH}"
+          export CPLUS_INCLUDE_PATH="/home/runner/work/KrakenCryptoTools/local/mpir/include/:${CPLUS_INCLUDE_PATH}"
+          export LIBRARY_PATH="/home/runner/work/KrakenCryptoTools/local/mpir/lib/:${LIBRARY_PATH}"
+          export LD_LIBRARY_PATH="/home/runner/work/KrakenCryptoTools/local/mpir/lib/:${LD_LIBRARY_PATH}"
+          export CPLUS_INCLUDE_PATH="/home/runner/work/KrakenCryptoTools/local/cryptopp/include/:${CPLUS_INCLUDE_PATH}"
+          export LIBRARY_PATH="/home/runner/work/KrakenCryptoTools/local/cryptopp/lib/:${LIBRARY_PATH}"
+          export LD_LIBRARY_PATH="/home/runner/work/KrakenCryptoTools/local/cryptopp/lib/:${LD_LIBRARY_PATH}"
+
+
+      # Install SCALE-MAMBA
+      - name: Install SCALE-MAMBA
+        run: |
+          cd ../local
+          git clone https://github.com/tilenmarc/SCALE-MAMBA.git
+          cd SCALE-MAMBA
+          cp CONFIG CONFIG.mine
+          echo 'ROOT = /home/runner/work/KrakenCryptoTools/local/SCALE-MAMBA' >> CONFIG.mine
+          echo 'OSSL = /home/runner/work/KrakenCryptoTools/local/openssl' >> CONFIG.mine
+          cp Auto-Test-Data/Cert-Store/* Cert-Store/
+          cp Auto-Test-Data/1/* Data/
+          mkdir build
+          cd build && CC=gcc CXX=g++ cmake -DOPENSSL_ROOT_DIR=/home/runner/work/KrakenCryptoTools/local/openssl -DCRYPTOPP_ROOT_DIR=/home/runner/work/KrakenCryptoTools/local/cryptopp -DMPIR_ROOT_DIR=/home/runner/work/KrakenCryptoTools/local/mpir .. && make
+
+      - name: Set up MAMBA
+        run: |
+          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y
+          export PATH="/root/.cargo/bin:${PATH}"d
+          cd ../local/SCALE-MAMBA && ./compile.sh Programs/tutorial/
+
+
+      - name: Build
+        run: go build -v
+
+      - name: Test
+        run: |
+          export SM_PATH="/home/runner/work/KrakenCryptoTools/local/SCALE-MAMBA"
+          go test -v ./database/...
+          go test -v ./key_management/...
+          go test -v ./data_management/...
+          go test -v ./hpre/...
+          go test -v ./mpc_engine/...
+          go test -v ./server/...
+          go test -v ./computation/...
+          go test -v ./config/...
+          go test -v .
+          GOOS=js GOARCH=wasm go test -v ./wasm/reencryption_wasm/reencryption_wasm.go ./wasm/reencryption_wasm/reencryption_wasm_test.go
+          GOOS=js GOARCH=wasm go test -v ./wasm/mpc_wasm/mpc_wasm.go ./wasm/mpc_wasm/mpc_wasm_test.go
