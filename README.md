@@ -3,7 +3,7 @@
 The repository consists of the implementation of an application of Zero-Knowledge Proofs (ZKP) in the
 KRAKEN marketplace.
 
-## Authenticity of data in MPC system
+## Authenticity of data in an MPC system
 
 #### Problem
 The KRAKEN marketplace uses Multi-Party Computation (MPC) paradigm to process private data. This means that the data that
