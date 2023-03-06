@@ -22,7 +22,8 @@ was signed by the data owners. See the bellow figure for more details.
 [//]: # (![]&#40;.github/figures/zkp_flow.png&#41;)
 
 <p align="center">
-  <img src=".github/figures/zkp_flow.png" width="70%">
+<img src=".github/figures/zkp_flow.png" width="70%" title="Flow of data in KRAKEN. The MPC shares in the
+figure are encrypted so that only designated MPC nodes can access it.">
 </p>
 
 ## Running the code
