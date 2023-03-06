@@ -14,10 +14,10 @@ authentic, since no computation node has access to the data in plaintext.
 #### Solution
 In the standard approach, data authenticity is guaranteed by adding a cryptographic signature by the
 data producer, that is checked by the data consumers. Since this is not possible in the MPC scenario, since the
-nodes do not have access to the data in plaintext, we built the authenticity guarantee on ZK-Proofs. Instead,
-ZK-Proofs are attached to shares of data, proving to the MPC nodes that the share they received, together to the
-commits of the shares that other MPC nodes received, does indeed match the data that was signed by the data
-owners. See the bellow figure for the details.
+nodes do not have access to the data in plaintext, we built the authenticity guarantees on ZK-Proofs.
+ZK-Proofs are attached to the shares of data, proving to each of the MPC nodes that the share they received,
+together to the commits of the shares that other MPC nodes received, does indeed match the data that
+was signed by the data owners. See the bellow figure for more details.
 
 [//]: # (![]&#40;.github/figures/zkp_flow.png&#41;)
 
@@ -27,7 +27,7 @@ owners. See the bellow figure for the details.
 
 ## Running the code
 The code was directly integrated in the KRAKEN marketplace. Please see `zkp_splits_csv_test.go` file for
-the complete data flow in the ZKP scenario. To run the test simply run in the main repository
+the complete data flow in the ZKP scenario. To run the test simply run in the main repository:
 ```console
 go test -v .
 ```
