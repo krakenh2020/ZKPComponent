@@ -1,4 +1,4 @@
-module github.com/krakenh2020/ZKPcomponent
+module github.com/krakenh2020/ZKPComponent
 
 go 1.19
 

@@ -11,7 +11,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/krakenh2020/ZKPcomponent/encryption"
+	"github.com/krakenh2020/ZKPComponent/encryption"
 )
 
 // CreateSharesShamir is a helping function that splits a vector

@@ -1,11 +1,11 @@
 package encryption_test
 
 import (
-	"github.com/krakenh2020/ZKPcomponent/encryption"
+	"github.com/krakenh2020/ZKPComponent/encryption"
 	"testing"
 
-	"github.com/krakenh2020/ZKPcomponent/data_common"
-	"github.com/krakenh2020/ZKPcomponent/key_management"
+	"github.com/krakenh2020/ZKPComponent/data_common"
+	"github.com/krakenh2020/ZKPComponent/key_management"
 	"github.com/stretchr/testify/assert"
 )
 

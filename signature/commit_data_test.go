@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/krakenh2020/ZKPcomponent/data_common"
-	"github.com/krakenh2020/ZKPcomponent/signature/ec"
+	"github.com/krakenh2020/ZKPComponent/data_common"
+	"github.com/krakenh2020/ZKPComponent/signature/ec"
 	"github.com/stretchr/testify/assert"
 )
 

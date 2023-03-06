@@ -6,8 +6,8 @@ import (
 	"math/big"
 	"strconv"
 
-	"github.com/krakenh2020/ZKPcomponent/data_common"
-	"github.com/krakenh2020/ZKPcomponent/signature/ec"
+	"github.com/krakenh2020/ZKPComponent/data_common"
+	"github.com/krakenh2020/ZKPComponent/signature/ec"
 )
 
 func CreateSharesShamirSpecial(input []*big.Int, r *big.Int) ([][]*big.Int, error) {

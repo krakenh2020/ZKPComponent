@@ -1,11 +1,11 @@
-package ZKPcomponent
+package ZKPComponent
 
 import (
 	"bytes"
 	"crypto/rand"
 	"encoding/json"
 	"fmt"
-	"github.com/krakenh2020/ZKPcomponent/signature"
+	"github.com/krakenh2020/ZKPComponent/signature"
 	"os"
 	"testing"
 	"time"
@@ -16,7 +16,7 @@ import (
 	"github.com/consensys/gnark/backend"
 	"github.com/consensys/gnark/backend/groth16"
 	"github.com/consensys/gnark/frontend"
-	"github.com/krakenh2020/ZKPcomponent/key_management"
+	"github.com/krakenh2020/ZKPComponent/key_management"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -4,8 +4,8 @@ import (
 	"crypto/rand"
 
 	"github.com/consensys/gnark-crypto/ecc/bn254/twistededwards"
-	"github.com/krakenh2020/ZKPcomponent/data_common"
-	"github.com/krakenh2020/ZKPcomponent/signature/ec"
+	"github.com/krakenh2020/ZKPComponent/data_common"
+	"github.com/krakenh2020/ZKPComponent/signature/ec"
 
 	"crypto/sha256"
 	"encoding/json"

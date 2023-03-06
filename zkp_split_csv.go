@@ -1,4 +1,4 @@
-package ZKPcomponent
+package ZKPComponent
 
 import (
 	"bufio"
@@ -6,7 +6,7 @@ import (
 	"crypto/sha256"
 	"encoding/json"
 	"fmt"
-	"github.com/krakenh2020/ZKPcomponent/signature"
+	"github.com/krakenh2020/ZKPComponent/signature"
 	"math/big"
 	"os"
 	"strings"
@@ -16,9 +16,9 @@ import (
 	sig "github.com/consensys/gnark-crypto/signature"
 	"github.com/consensys/gnark/backend/groth16"
 	"github.com/consensys/gnark/frontend"
-	"github.com/krakenh2020/ZKPcomponent/data_common"
-	"github.com/krakenh2020/ZKPcomponent/encryption"
-	"github.com/krakenh2020/ZKPcomponent/signature/ec"
+	"github.com/krakenh2020/ZKPComponent/data_common"
+	"github.com/krakenh2020/ZKPComponent/encryption"
+	"github.com/krakenh2020/ZKPComponent/signature/ec"
 )
 
 type AuthProof struct {

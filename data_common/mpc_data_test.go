@@ -4,7 +4,7 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/krakenh2020/ZKPcomponent/key_management"
+	"github.com/krakenh2020/ZKPComponent/key_management"
 	"github.com/stretchr/testify/assert"
 )
 

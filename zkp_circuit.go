@@ -1,11 +1,11 @@
-package ZKPcomponent
+package ZKPComponent
 
 import (
 	"github.com/consensys/gnark-crypto/ecc"
 	"github.com/consensys/gnark/frontend"
 	"github.com/consensys/gnark/std/algebra/twistededwards"
 	"github.com/consensys/gnark/std/hash/mimc"
-	"github.com/krakenh2020/ZKPcomponent/signature"
+	"github.com/krakenh2020/ZKPComponent/signature"
 )
 
 type CircuitDataset struct {
